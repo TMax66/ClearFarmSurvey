@@ -1,7 +1,7 @@
 
 server <- function(input, output, session) {
 
-  ####SEZIONE 1##################################################
+####SEZIONE 1##################################################
   output$Quest <- renderValueBox({
     valueBox(
       dim(dati)[1], "# Questionari", icon = icon("keyboard"),
@@ -155,7 +155,7 @@ q14<-reactive({ dati %>%
     filter(robot=="Sì") %>% 
     select(17:22) %>% rename('produzione latte'=prodmilk,'composizione latte'=compomilk ,
                              'conducibilità'= condumilk, 'BCS'= bcs,
-                             "parametri sanitari"=healthpam, "altro"=al14) %>% 
+                             "parametri sanitari"=healthpam, "altro"=al24) %>% 
     pivot_longer(1:6, names_to = "categoria", values_to = "risposta") %>% 
     group_by(categoria, risposta) %>% 
     summarise(n=n()) %>% 
@@ -184,7 +184,7 @@ q16<-reactive({ dati %>%
     filter(robot=="No") %>% 
     select(24:28) %>% rename('bolo ruminale'=bolo ,
                              'orecchino'= orecc, 'podometro'= podom,
-                             "altro"=al16) %>% 
+                             "altro"=al30) %>% 
     pivot_longer(1:5, names_to = "categoria", values_to = "risposta") %>% 
     group_by(categoria, risposta) %>% 
     summarise(n=n()) %>% 
@@ -205,7 +205,7 @@ q18<-reactive({ dati %>%
     filter(sensori=="Sì") %>% 
     select(30:40) %>% rename('movimento'=mov, "stazione"=staz, "alimentazione"=eat,
                              'ruminazione'= rumina, 'accesso robot mung'= robomung,
-                             'zoppia'=zoppo, 'BCS'=Sbcs, 'distress termico'=distress, "altro"=al18) %>% 
+                             'zoppia'=zoppo, 'BCS'=Sbcs, 'distress termico'=distress, "altro"=al40) %>% 
     pivot_longer(1:9, names_to = "categoria", values_to = "risposta") %>% 
     group_by(categoria, risposta) %>% 
     summarise(n=n()) %>% 
@@ -223,7 +223,7 @@ output$quest18<-renderPlot(q18())
 
 q20<-reactive({ dati %>% 
     filter(sensori=="Sì") %>% 
-    select(42:44) %>% rename('qualità aria'=qair,   "altro"=altro20) %>% 
+    select(42:44) %>% rename('qualità aria'=qair,   "altro"=altro44) %>% 
     pivot_longer(1:3, names_to = "categoria", values_to = "risposta") %>% 
     group_by(categoria, risposta) %>% 
     summarise(n=n()) %>% 
@@ -243,7 +243,7 @@ output$quest20<-renderPlot(q20())
 q22<-reactive({ dati %>% 
     filter(sensori=="Sì") %>% 
     select(46:50) %>% rename('temperatura'=temp,   'umidità'=umid, 
-                            'polveri'=polv, "altro"=al22) %>% 
+                            'polveri'=polv, "altro"=al51) %>% 
     pivot_longer(1:3, names_to = "categoria", values_to = "risposta") %>% 
     group_by(categoria, risposta) %>% 
     summarise(n=n()) %>% 

@@ -17,20 +17,23 @@
   library(ggthemes)
   library(googledrive)
   library(patchwork)
-options(
-  gargle_oauth_cache = ".secrets",
-  gargle_oauth_email = TRUE
-)
-drive_auth()
-sheets_auth(token = drive_token())
-  mydrive<-drive_find(type = "spreadsheet") 
-id<-mydrive[1,2]
-dati<-read_sheet(id$id)
-dati<-dati[,-1]
+  options(
+    gargle_oauth_cache = ".secrets",
+    gargle_oauth_email = TRUE
+  )
+  drive_auth()
+  sheets_auth(token = drive_token())
+    mydrive<-drive_find(type = "spreadsheet") 
+  id<-mydrive[1,2]
+  dati<-read_sheet(id$id)
+  dati<-dati[,-1]
+        
 
+  
 
 nomi<-c("reg","ruolo", "tipo","lattazione", "asciutte", "nmanze","biogas","sensori",
-        "interesse", "noint", "moresens", "bovlat","bovasc","bmanze","vit",
+        "interesse", "noint",  "sambbovlat","sambbovasc","sambmanze","sambvit",
+        "sabovlat","sabovasc","samanze", "savit",
         "robot","prodmilk","compomilk","condumilk","bcs","healthpam", "pesaut","acrob","al24","al25",
         "collare","bolo","orecc","pedom","al30", "al31","mov","staz","eat","rumina",
         "Sbcs","estro","parto","distress","al40","al41","clima", "qair", "altro44", "al45",
