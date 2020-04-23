@@ -101,20 +101,20 @@ ui <- dashboardPage(
       tabItem(tabName = "risp3",
               
               fluidRow(
-                column(4, 
-                       plotOutput("quest24")),
-                column(4, 
-                       plotOutput("likert")), 
-                column(4, 
-                       plotOutput("quest26"))
-                
+                column(6, 
+                       plotOutput("ptuso")),
+                column(6, 
+                       plotOutput("likert")) 
               ), 
               br(), 
               hr(), 
               
               fluidRow(
-                column(5, 
-                plotOutput("quest29"))
+                column(6, 
+                valueBoxOutput("easy", width = NULL),      
+                plotOutput("pmiglior")), 
+                column(6, 
+                       plotOutput("pinnov"))    
               )
             
               

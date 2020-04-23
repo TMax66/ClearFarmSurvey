@@ -340,40 +340,45 @@ output$pambpr<-renderPlot(ambpr())
 
 ######SEZIONE 3########################################
 
-output$quest24<-renderPlot(
+
+
+output$ptuso<-renderPlot(
   
   dati %>% 
-    filter(sensori=="Sì")%>% 
+    filter(sensori!="No")%>% 
     group_by(usedtime) %>% 
     summarise(n=n()) %>% 
     arrange(n) %>% 
     mutate(usedtime=factor(usedtime, unique(usedtime))) %>% 
     ggplot(aes(x=usedtime, y=n))+geom_bar(stat="identity", fill="steelblue3")+
-    labs(x="", title="tempo utilizzo della tecnologia", y='n.aziende')+coord_flip()
+    labs(x="", title="Da quanto tempo usa questa tecnologia", y='n.aziende')+coord_flip()
 
 )
+
+
 
 output$likert<-renderPlot(
  
 dati %>% 
-  filter(sensori=="Sì")%>% 
+  filter(sensori!="No")%>% 
   select(agevo) %>% 
-  mutate(agevo=factor(agevo)) %>% 
+  mutate(agevo=factor(agevo, levels=c("Non sono d'accordo", "Sono poco d'accordo",
+                                       "Sono d'accordo", "Sono molto d'accordo", 
+                                       "Sono totalmente d'accordo"))) %>% 
   group_by(agevo) %>% 
   summarise(n=n()) %>% 
   ggplot(aes(x=agevo, y=n))+geom_bar(stat="identity", fill="steelblue3")+
-  labs(x='', y='n.aziende', title="questa tecnologia ha agevolato il suo lavoro")
+  labs(x='', y='n.aziende', title="Questa tecnologia ha agevolato il suo lavoro!")
 )
 
 
-q26<-reactive({ dati %>% 
-    filter(sensori=="Sì") %>% 
-    select(54:57) %>% rename('qualità produzione'=qualprod, 'benessere'=welfare, 
-                             'economia aziendale'=ecoaz, "altro"=al26) %>% 
-    pivot_longer(1:3, names_to = "categoria", values_to = "risposta") %>% 
+miglior<-reactive({ dati %>% 
+    filter(sensori!="No") %>% 
+    select(58:61) %>% rename('qualità produzione'=qualprod, 'benessere'=welfare, 
+                             'economia aziendale'=ecoaz, "altro"=al58) %>% 
+    pivot_longer(1:4, names_to = "categoria", values_to = "risposta") %>% 
     group_by(categoria, risposta) %>% 
     summarise(n=n()) %>% 
-    # filter(risp=="SI") %>% 
     ungroup() %>% 
     arrange(n) %>% 
     mutate(categoria=factor(categoria, unique(categoria))) %>% 
@@ -383,13 +388,23 @@ q26<-reactive({ dati %>%
                                      y="n.aziende", x='')+
     coord_flip()})
 
-output$quest26<-renderPlot(q26())
+output$pmiglior<-renderPlot(miglior())
 
+output$easy <- renderValueBox({
+  valueBox(
+    dati %>% 
+      filter(sensori!="No") %>% 
+      select(easyuse) %>% 
+      filter(easyuse=="Sì") %>% 
+      summarise(n=n()), "# aziende ritengono i dati raccolti di facile utilizzo",
+    color = "red"
+  )
+})
 
-output$quest29<-renderPlot(
+output$pinnov<-renderPlot(
   
   dati %>% 
-    filter(sensori=="Sì")%>% 
+    filter(sensori!="No") %>% 
     select(innov) %>%
     mutate( innov=recode(innov, `Avere un riscontro immediato di un cambiamento nel comportamento dell’animale`='riscontro immediato del comportamento',
                               `Usare più sensori integrati contemporaneamente`='usare più sensori',
