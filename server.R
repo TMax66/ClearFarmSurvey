@@ -11,26 +11,26 @@ server <- function(input, output, session) {
   
   output$hsize <- renderValueBox({
     valueBox(
-      median(dati$lattazione), "# Capi in lattazione (consistenza mediana)",
+      median(dati$lattazione), "Mediana capi in lattazione ",
       color = "blue"
     )
   })
   
   output$dry <- renderValueBox({
     valueBox(
-      median(dati$asciutte), "# Capi in asciutta (consistenza mediana)",
+      median(dati$asciutte), "Mediana capi in asciutta",
       color = "blue"
     )
   })
   
   output$heif <- renderValueBox({
     valueBox(
-      round(median(dati$nmanze),0), "# Manze (consistenza mediana)",
+      round(median(dati$nmanze),0), " Mediana n. Manze",
       color = "blue"
     )
   })
   
-  
+  #<<<regione
 reg<-reactive({
     
     dati %>% 
@@ -44,6 +44,7 @@ reg<-reactive({
     
   })
   
+#<<<ruolo
   ruol<-reactive({
     
     dati %>% 
@@ -56,7 +57,7 @@ reg<-reactive({
     
   })
   
-  
+  #<<<<tipologia
   tipol<-reactive({
     
     dati %>% 
@@ -69,6 +70,37 @@ reg<-reactive({
     
   })
   
+  #<<<<uso di sensori??##
+  sensor<-reactive({
+    
+    dati %>% 
+      group_by(sensori) %>% 
+      summarise(n=n()) %>% 
+      arrange(n) %>% 
+      mutate(sensori=factor(sensori, unique(sensori))) %>% 
+      ggplot(aes(x=sensori, y=n))+geom_bar(stat="identity", fill="steelblue3")+
+      labs(x="", title="Sensori in azienda?")+coord_flip()+ theme(axis.text=element_text(size=12))
+    
+  })
+  
+  
+  #<<<<se no è interessato?
+  yesint<-reactive({
+    
+    dati %>% 
+      filter(sensori=="No") %>% 
+      select(interesse) %>% 
+      group_by(interesse) %>% 
+      summarise(n=n()) %>% 
+      arrange(n) %>% 
+      mutate(interesse=factor(interesse, unique(interesse))) %>% 
+      ggplot(aes(x=interesse, y=n))+geom_bar(stat="identity", fill="steelblue3")+
+      labs(x="", title="Se non ha sensori è interessato?")+coord_flip()+ theme(axis.text=element_text(size=12))
+  })
+
+  
+  #<<<non interessato ai sensori perchè....
+  
   nonint<-reactive({
     
     dati %>% 
@@ -78,15 +110,22 @@ reg<-reactive({
       arrange(n) %>% 
       mutate(nonint=factor(noint, unique(noint))) %>% 
       ggplot(aes(x=noint, y=n))+geom_bar(stat="identity", fill="steelblue3")+
-      labs(x="", title="Motivi di mancato interesse all'introduzione di sensori")+coord_flip()+ theme(axis.text=element_text(size=12))
+      labs(x="", title="Motivi di mancato interesse")+coord_flip()+ theme(axis.text=element_text(size=12))
     
   })
   
   
+  
+
   output$gr1<-renderPlot(
     
-    (reg()/ruol())|(tipol()/nonint())
-
+    (reg()/ruol()/tipol())
+  )
+  
+  
+  output$gr2<-renderPlot(
+    
+    (sensor()/yesint()/nonint())
   )
   
   
@@ -101,33 +140,52 @@ reg<-reactive({
   #<-sensori
   output$senso <- renderValueBox({
     valueBox(
-      table(dati$sensori)[2] , "# aziende che utilizzano sensori o altri dispositivi",
+      dati %>% 
+        select(sensori) %>% 
+        filter(sensori!="No") %>% 
+        summarise(n=n()), "# aziende che utilizzano sensori",
       color = "red"
     )
   })
-  #<-interesse
+  
+  
+  
+  
+  #<-interesse <<<< fare un barplot
+
   output$inter <- renderValueBox({
     valueBox(
-      table(dati$interesse)[2] , "# aziende interessate all'uso di sensori",
+      dati %>% 
+        filter(sensori=="No") %>% 
+        select(interesse) %>% 
+        filter(interesse!="No") %>% 
+        summarise(n=n()), "# aziende interessate all'uso di sensori",
       color = "red"
     )
   })
+  
+  
+  #<-non interessato
+  
+  output$noninter <- renderValueBox({
+    valueBox(
+      dati %>% 
+        filter(sensori=="No") %>% 
+        select(interesse) %>% 
+        filter(interesse=="No") %>% 
+        summarise(n=n()), "# aziende non interessate all'uso di sensori",
+      color = "red"
+    )
+  })
+  
+  
   
  #########SEZIONE 2################################
 
-  output$morsens <- renderValueBox({
-    valueBox(
-      table(dati$moresens)[2] , "# aziende che utilizzano più sensori",
-      color = "red"
-    )
-  })
-  
-  
-
-q12<-reactive({ dati %>% 
-  filter(moresens=="Sì") %>% 
-  select(12:15) %>% rename('bov in lattazione'=bovlat, 'bov in asciutta'=bovasc ,
-                           'manze'= bmanze, 'vitelli'= vit) %>% 
+samb<-reactive({ dati %>% 
+  filter(sensori!="No") %>% 
+  select(11:14) %>% rename('bov in lattazione'=sambbovlat, 'bov in asciutta'=sambbovasc ,
+                           'manze'= sambmanze, 'vitelli'= sambvit) %>% 
   pivot_longer(1:4, names_to = "categoria", values_to = "risposta") %>% 
   group_by(categoria, risposta) %>% 
   summarise(n=n()) %>% 
@@ -137,11 +195,33 @@ q12<-reactive({ dati %>%
   mutate(categoria=factor(categoria, unique(categoria))) %>% 
   ggplot(aes(x=categoria, y=n, fill=risposta))+
   scale_fill_manual(values = c("steelblue", "blue"))+
-  geom_bar(stat = "identity")+labs(title="categorie di animali per le quali si utilizzano sensori",
-                                   y="n.aziende", x='')+
-  coord_flip()})
+  geom_bar(stat = "identity")+labs(title="categorie di animali per le quali si utilizzano sensori ambientali",
+                                   y="n.aziende", x='')+coord_flip()
+    
+    })
 
-output$quest12<-renderPlot(q12())
+output$psamb<-renderPlot(samb())
+
+
+sanim<-reactive({ dati %>% 
+    filter(sensori!="No") %>% 
+    select(15:18) %>% rename('bov in lattazione'=sabovlat, 'bov in asciutta'=sabovasc ,
+                             'manze'= samanze, 'vitelli'= savit) %>% 
+    pivot_longer(1:4, names_to = "categoria", values_to = "risposta") %>% 
+    group_by(categoria, risposta) %>% 
+    summarise(n=n()) %>% 
+    #filter(risp=="SI") %>% 
+    ungroup() %>% 
+    arrange(n) %>% 
+    mutate(categoria=factor(categoria, unique(categoria))) %>% 
+    ggplot(aes(x=categoria, y=n, fill=risposta))+
+    scale_fill_manual(values = c("steelblue", "blue"))+
+    geom_bar(stat = "identity")+labs(title="categorie di animali per le quali si utilizzano sensori su animali",
+                                     y="n.aziende", x='')+coord_flip()
+  
+})
+
+output$psanim<-renderPlot(sanim())
 
 
 output$robott <- renderValueBox({
@@ -151,12 +231,13 @@ output$robott <- renderValueBox({
   )
 })
 
-q14<-reactive({ dati %>% 
+inforobo<-reactive({ dati %>% 
     filter(robot=="Sì") %>% 
-    select(17:22) %>% rename('produzione latte'=prodmilk,'composizione latte'=compomilk ,
+    select(20:27) %>% rename('produzione latte'=prodmilk,'composizione latte'=compomilk ,
                              'conducibilità'= condumilk, 'BCS'= bcs,
-                             "parametri sanitari"=healthpam, "altro"=al24) %>% 
-    pivot_longer(1:6, names_to = "categoria", values_to = "risposta") %>% 
+                             "parametri sanitari"=healthpam, "pesatura autom"=pesaut, 
+                             "accesso al robot"=acrob,"altro"=al24) %>% 
+    pivot_longer(1:8, names_to = "categoria", values_to = "risposta") %>% 
     group_by(categoria, risposta) %>% 
     summarise(n=n()) %>% 
     #filter(risp=="Si") %>% 
@@ -169,7 +250,7 @@ q14<-reactive({ dati %>%
                                      y="n.aziende",x='')+
     coord_flip()})
 
-output$quest14<-renderPlot(q14())
+output$pinforobo<-renderPlot(inforobo())
 
 
 output$norobot <- renderValueBox({
@@ -180,10 +261,10 @@ output$norobot <- renderValueBox({
 })
 
 
-q16<-reactive({ dati %>% 
+norob<-reactive({ dati %>% 
     filter(robot=="No") %>% 
-    select(24:28) %>% rename('bolo ruminale'=bolo ,
-                             'orecchino'= orecc, 'podometro'= podom,
+    select(29:33) %>% rename('bolo ruminale'=bolo ,
+                             'orecchino'= orecc, 'pedometro'= pedom,
                              "altro"=al30) %>% 
     pivot_longer(1:5, names_to = "categoria", values_to = "risposta") %>% 
     group_by(categoria, risposta) %>% 
@@ -194,18 +275,18 @@ q16<-reactive({ dati %>%
     mutate(categoria=factor(categoria, unique(categoria))) %>% 
     ggplot(aes(x=categoria, y=n, fill=risposta))+
     scale_fill_manual(values = c("steelblue", "blue"))+
-    geom_bar(stat = "identity")+labs(title="tipologia di sensori applicati agli animali",
+    geom_bar(stat = "identity")+labs(title="tipologia di sensori su animali (no robot)",
                                      y="n.aziende", x='')+
     coord_flip()})
 
-output$quest16<-renderPlot(q16())
+output$pnorob<-renderPlot(norob())
 
 
-q18<-reactive({ dati %>% 
-    filter(sensori=="Sì") %>% 
-    select(30:40) %>% rename('movimento'=mov, "stazione"=staz, "alimentazione"=eat,
-                             'ruminazione'= rumina, 'accesso robot mung'= robomung,
-                             'zoppia'=zoppo, 'BCS'=Sbcs, 'distress termico'=distress, "altro"=al40) %>% 
+anpar<-reactive({ dati %>% 
+    filter(sensori!="No") %>% 
+    select(35:43) %>% rename('movimento'=mov, "stazione"=staz, "alimentazione"=eat,
+                             'ruminazione'= rumina,  
+                               'BCS'=Sbcs, 'distress termico'=distress, "altro"=al40) %>% 
     pivot_longer(1:9, names_to = "categoria", values_to = "risposta") %>% 
     group_by(categoria, risposta) %>% 
     summarise(n=n()) %>% 
@@ -219,15 +300,14 @@ q18<-reactive({ dati %>%
                                      y="n.aziende")+
     coord_flip()})
 
-output$quest18<-renderPlot(q18())
+output$panpar<-renderPlot(anpar())
 
-q20<-reactive({ dati %>% 
-    filter(sensori=="Sì") %>% 
-    select(42:44) %>% rename('qualità aria'=qair,   "altro"=altro44) %>% 
+amb<-reactive({ dati %>% 
+    filter(sensori!="No") %>% 
+    select(45:47) %>% rename('qualità aria'=qair,   "altro"=altro44) %>% 
     pivot_longer(1:3, names_to = "categoria", values_to = "risposta") %>% 
     group_by(categoria, risposta) %>% 
     summarise(n=n()) %>% 
-    # filter(risp=="SI") %>% 
     ungroup() %>% 
     arrange(n) %>% 
     mutate(categoria=factor(categoria, unique(categoria))) %>% 
@@ -237,17 +317,16 @@ q20<-reactive({ dati %>%
                                      y="n.aziende", x='')+
     coord_flip()})
 
-output$quest20<-renderPlot(q20())
+output$pamb<-renderPlot(amb())
 
 
-q22<-reactive({ dati %>% 
-    filter(sensori=="Sì") %>% 
-    select(46:50) %>% rename('temperatura'=temp,   'umidità'=umid, 
-                            'polveri'=polv, "altro"=al51) %>% 
-    pivot_longer(1:3, names_to = "categoria", values_to = "risposta") %>% 
+ambpr<-reactive({ dati %>% 
+    filter(sensori!="No") %>% 
+    select(49:54) %>% rename('temperatura'=temp,   'umidità'=umid, 
+                            "CO2"=co2,"Ammoniaca"=nh3,"illuminazione"=luce, "altro"=al51) %>% 
+    pivot_longer(1:6, names_to = "categoria", values_to = "risposta") %>% 
     group_by(categoria, risposta) %>% 
     summarise(n=n()) %>% 
-    # filter(risp=="SI") %>% 
     ungroup() %>% 
     arrange(n) %>% 
     mutate(categoria=factor(categoria, unique(categoria))) %>% 
@@ -257,7 +336,7 @@ q22<-reactive({ dati %>%
                                      y="n.aziende", x='')+
     coord_flip()})
 
-output$quest22<-renderPlot(q22())
+output$pambpr<-renderPlot(ambpr())
 
 ######SEZIONE 3########################################
 

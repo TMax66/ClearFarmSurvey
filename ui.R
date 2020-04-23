@@ -29,7 +29,6 @@ ui <- dashboardPage(
       tabItem(
         tabName = "risp1",
         fluidRow(
-          box(width=12, solidHeader = TRUE,
             fluidRow(
           column(3,
           valueBoxOutput("Quest", width = NULL)),
@@ -39,49 +38,65 @@ ui <- dashboardPage(
           valueBoxOutput("dry", width = NULL)),
           column(3,
           valueBoxOutput("heif", width = NULL))
-        ))
+        )
         ), 
         fluidRow(
-          column(10, 
+          
+              fluidRow(
+                column(3,
+                       valueBoxOutput("gas", width = NULL)),
+                column(3,
+                       valueBoxOutput("senso", width = NULL)),
+                column(3,
+                       valueBoxOutput("inter", width = NULL)),
+                column(3,
+                       valueBoxOutput("noninter", width = NULL))
+              )
+        ),
+        fluidRow(
+          column(6, 
           box(solidHeader = TRUE, title="", width= 12,
               plotOutput("gr1"))),
-          column(2, 
-          valueBoxOutput("gas",width = NULL), 
-          valueBoxOutput("senso", width=NULL), 
-          valueBoxOutput("inter",width=NULL))
-        )
+          column(6, 
+                 box(solidHeader = TRUE, title="", width= 12,
+                     plotOutput("gr2"))   
+                 )
+          )
 
           ), 
       tabItem(
         tabName = "risp2",
          fluidRow(
-           column(4,
-          valueBoxOutput("morsens", width = NULL),
-          plotOutput("quest12")),
-          
-          column(4, 
-                 valueBoxOutput("robott",width = NULL),
-                 plotOutput("quest14")), 
-          column(4,
-                valueBoxOutput("norobot", width = NULL),
-                plotOutput("quest16")
-                )
-         ), 
-        br(), 
+           column(6,
+           plotOutput("psamb")),
+           column(6,
+           plotOutput("psanim"))), 
+      
         hr(),
         fluidRow(
           
-          column(4, 
-                 plotOutput("quest18")),
+          column(6, 
+                 valueBoxOutput("robott", width = NULL),
+                 plotOutput("pinforobo")),
                  
-          column(4, 
-                 plotOutput("quest20")), 
+          column(6, 
+                 valueBoxOutput("norobot", width = NULL),
+                 plotOutput("pnorob"))
+        ),
+        hr(),
+        fluidRow(
           
-          column(4, 
-                 plotOutput("quest22"))
-        )
-
-              
+          column(6, 
+                 plotOutput("panpar")),
+          column(6, 
+                 plotOutput("pamb")
+        )), 
+        
+        fluidRow(
+          
+          column(6, 
+                 plotOutput("pambpr"))
+              )
               ), 
       tabItem(tabName = "risp3",
               
