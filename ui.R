@@ -54,15 +54,25 @@ ui <- dashboardPage(
               )
         ),
         fluidRow(
+          column(6,
+           plotOutput("preg")),
           column(6, 
-          box(solidHeader = TRUE, title="", width= 12,
-              plotOutput("gr1"))),
+           plotOutput("pruol"))   
+                 ),
+        hr(),
+        fluidRow(
+          column(6,
+                 plotOutput("ptipol")),
           column(6, 
-                 box(solidHeader = TRUE, title="", width= 12,
-                     plotOutput("gr2"))   
-                 )
-          )
-
+                 plotOutput("psensor")) 
+                ), 
+        hr(),
+        fluidRow(
+          column(6,
+                 plotOutput("pyesint")),
+          column(6, 
+                 plotOutput("pnonint")) 
+                )
           ), 
       tabItem(
         tabName = "risp2",

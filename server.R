@@ -38,11 +38,14 @@ reg<-reactive({
       summarise(n=n()) %>% 
       arrange(n) %>% 
       mutate(reg=factor(reg, unique(reg))) %>% 
-      ggplot(aes(x=reg, y=n))+geom_bar(stat="identity", fill="steelblue3")+
-      labs(x="", title="Regione")+coord_flip()+ theme(axis.text=element_text(size=12))
+      ggplot(aes(x=reg, y=n))+geom_bar(stat="identity", fill="steelblue3", width = 0.5)+
+      labs(x="", title="Regione")+coord_flip()+ 
+      theme(axis.text=element_text(size=12))+theme_clean()
     
     
   })
+
+output$preg<-renderPlot(reg())
   
 #<<<ruolo
   ruol<-reactive({
@@ -52,10 +55,13 @@ reg<-reactive({
       summarise(n=n()) %>% 
       arrange(n) %>% 
       mutate(ruolo=factor(ruolo, unique(ruolo))) %>% 
-      ggplot(aes(x=ruolo, y=n))+geom_bar(stat="identity", fill="steelblue3")+
-      labs(x="", title="Ruolo in azienda")+coord_flip()+ theme(axis.text=element_text(size=12))
+      ggplot(aes(x=ruolo, y=n))+geom_bar(stat="identity", fill="steelblue3", width = 0.5)+
+      labs(x="", title="Ruolo in azienda")+coord_flip()+ 
+      theme(axis.text=element_text(size=12))+ theme_clean()
     
   })
+  
+output$pruol<-renderPlot(ruol())
   
   #<<<<tipologia
   tipol<-reactive({
@@ -65,10 +71,14 @@ reg<-reactive({
       summarise(n=n()) %>% 
       arrange(n) %>% 
       mutate(tipo=factor(tipo, unique(tipo))) %>% 
-      ggplot(aes(x=tipo, y=n))+geom_bar(stat="identity", fill="steelblue3")+
-      labs(x="", title="Tipo allevamento")+coord_flip()+ theme(axis.text=element_text(size=12))
+      ggplot(aes(x=tipo, y=n))+geom_bar(stat="identity", fill="steelblue3", width = 0.5)+
+      labs(x="", title="Tipo allevamento")+coord_flip()+
+      theme(axis.text=element_text(size=12))+ theme_clean()
     
   })
+  
+  output$ptipol<-renderPlot(tipol()) 
+  
   
   #<<<<uso di sensori??##
   sensor<-reactive({
@@ -78,11 +88,14 @@ reg<-reactive({
       summarise(n=n()) %>% 
       arrange(n) %>% 
       mutate(sensori=factor(sensori, unique(sensori))) %>% 
-      ggplot(aes(x=sensori, y=n))+geom_bar(stat="identity", fill="steelblue3")+
-      labs(x="", title="Sensori in azienda?")+coord_flip()+ theme(axis.text=element_text(size=12))
+      ggplot(aes(x=sensori, y=n))+geom_bar(stat="identity", fill="steelblue3", width = 0.5)+
+      labs(x="", title="Sensori in azienda?")+coord_flip()+ 
+      theme(axis.text=element_text(size=12))+ width = 0.5
     
   })
   
+  
+  output$psensor<-renderPlot(sensor())
   
   #<<<<se no è interessato?
   yesint<-reactive({
@@ -94,10 +107,12 @@ reg<-reactive({
       summarise(n=n()) %>% 
       arrange(n) %>% 
       mutate(interesse=factor(interesse, unique(interesse))) %>% 
-      ggplot(aes(x=interesse, y=n))+geom_bar(stat="identity", fill="steelblue3")+
-      labs(x="", title="Se non ha sensori è interessato?")+coord_flip()+ theme(axis.text=element_text(size=12))
+      ggplot(aes(x=interesse, y=n))+geom_bar(stat="identity", fill="steelblue3", width = 0.5)+
+      labs(x="", title="Se non ha sensori è interessato?")+coord_flip()+
+      theme(axis.text=element_text(size=12))+ theme_clean()
   })
 
+  output$pyesint<-renderPlot(yesint())
   
   #<<<non interessato ai sensori perchè....
   
@@ -109,24 +124,25 @@ reg<-reactive({
       summarise(n=n()) %>% 
       arrange(n) %>% 
       mutate(nonint=factor(noint, unique(noint))) %>% 
-      ggplot(aes(x=noint, y=n))+geom_bar(stat="identity", fill="steelblue3")+
-      labs(x="", title="Motivi di mancato interesse")+coord_flip()+ theme(axis.text=element_text(size=12))
+      ggplot(aes(x=noint, y=n))+geom_bar(stat="identity", fill="steelblue3", width = 0.5)+
+      labs(x="", title="Motivi di mancato interesse")+coord_flip()+ 
+      theme(axis.text=element_text(size=12))+theme_clean()
     
   })
   
-  
+  output$pnonint<-renderPlot(nonint())
   
 
-  output$gr1<-renderPlot(
-    
-    (reg()/ruol()/tipol())
-  )
-  
-  
-  output$gr2<-renderPlot(
-    
-    (sensor()/yesint()/nonint())
-  )
+  # output$gr1<-renderPlot(
+  #   
+  #   (reg()/ruol()/tipol())
+  # )
+  # 
+  # 
+  # output$gr2<-renderPlot(
+  #   
+  #   (sensor()/yesint()/nonint())
+  # )
   
   
   #<-biogas
@@ -195,8 +211,8 @@ samb<-reactive({ dati %>%
   mutate(categoria=factor(categoria, unique(categoria))) %>% 
   ggplot(aes(x=categoria, y=n, fill=risposta))+
   scale_fill_manual(values = c("steelblue", "blue"))+
-  geom_bar(stat = "identity")+labs(title="categorie di animali per le quali si utilizzano sensori ambientali",
-                                   y="n.aziende", x='')+coord_flip()
+  geom_bar(stat = "identity",width = 0.5)+labs(title="categorie di animali per le quali si utilizzano sensori ambientali",
+                                   y="n.aziende", x='')+coord_flip()+theme_clean()
     
     })
 
@@ -216,8 +232,8 @@ sanim<-reactive({ dati %>%
     mutate(categoria=factor(categoria, unique(categoria))) %>% 
     ggplot(aes(x=categoria, y=n, fill=risposta))+
     scale_fill_manual(values = c("steelblue", "blue"))+
-    geom_bar(stat = "identity")+labs(title="categorie di animali per le quali si utilizzano sensori su animali",
-                                     y="n.aziende", x='')+coord_flip()
+    geom_bar(stat = "identity", width = 0.5)+labs(title="categorie di animali per le quali si utilizzano sensori su animali",
+                                     y="n.aziende", x='')+coord_flip()+theme_clean()
   
 })
 
@@ -246,9 +262,9 @@ inforobo<-reactive({ dati %>%
     mutate(categoria=factor(categoria, unique(categoria))) %>% 
     ggplot(aes(x=categoria, y=n, fill=risposta))+
     scale_fill_manual(values = c("steelblue", "blue"))+
-    geom_bar(stat = "identity")+labs(title="tipologia di informazioni raccolte dal robot di mungitura",
+    geom_bar(stat = "identity", width = 0.5)+labs(title="tipologia di informazioni raccolte dal robot di mungitura",
                                      y="n.aziende",x='')+
-    coord_flip()})
+    coord_flip()+theme_clean()})
 
 output$pinforobo<-renderPlot(inforobo())
 
@@ -275,9 +291,9 @@ norob<-reactive({ dati %>%
     mutate(categoria=factor(categoria, unique(categoria))) %>% 
     ggplot(aes(x=categoria, y=n, fill=risposta))+
     scale_fill_manual(values = c("steelblue", "blue"))+
-    geom_bar(stat = "identity")+labs(title="tipologia di sensori su animali (no robot)",
+    geom_bar(stat = "identity", width = 0.5)+labs(title="tipologia di sensori su animali (no robot)",
                                      y="n.aziende", x='')+
-    coord_flip()})
+    coord_flip()+theme_clean()})
 
 output$pnorob<-renderPlot(norob())
 
@@ -296,9 +312,9 @@ anpar<-reactive({ dati %>%
     mutate(categoria=factor(categoria, unique(categoria))) %>% 
     ggplot(aes(x=categoria, y=n, fill=risposta))+
     scale_fill_manual(values = c("steelblue", "blue"))+
-    geom_bar(stat = "identity")+labs(title="parametri rilevati dai sensori sugli animali",
+    geom_bar(stat = "identity", width = 0.5)+labs(title="parametri rilevati dai sensori sugli animali",
                                      y="n.aziende")+
-    coord_flip()})
+    coord_flip()+theme_clean()})
 
 output$panpar<-renderPlot(anpar())
 
@@ -332,9 +348,9 @@ ambpr<-reactive({ dati %>%
     mutate(categoria=factor(categoria, unique(categoria))) %>% 
     ggplot(aes(x=categoria, y=n, fill=risposta))+
     scale_fill_manual(values = c("steelblue", "blue"))+
-    geom_bar(stat = "identity")+labs(title=" parametri rilevati dai sensori-dispositivi ambientali",
+    geom_bar(stat = "identity", width = 0.5)+labs(title=" parametri rilevati dai sensori-dispositivi ambientali",
                                      y="n.aziende", x='')+
-    coord_flip()})
+    coord_flip()+theme_clean()})
 
 output$pambpr<-renderPlot(ambpr())
 
@@ -350,8 +366,9 @@ output$ptuso<-renderPlot(
     summarise(n=n()) %>% 
     arrange(n) %>% 
     mutate(usedtime=factor(usedtime, unique(usedtime))) %>% 
-    ggplot(aes(x=usedtime, y=n))+geom_bar(stat="identity", fill="steelblue3")+
-    labs(x="", title="Da quanto tempo usa questa tecnologia", y='n.aziende')+coord_flip()
+    ggplot(aes(x=usedtime, y=n))+geom_bar(stat="identity", fill="steelblue3", width = 0.5)+
+    labs(x="", title="Da quanto tempo usa questa tecnologia", y='n.aziende')+coord_flip()+
+    theme_clean()
 
 )
 
@@ -367,8 +384,9 @@ dati %>%
                                        "Sono totalmente d'accordo"))) %>% 
   group_by(agevo) %>% 
   summarise(n=n()) %>% 
-  ggplot(aes(x=agevo, y=n))+geom_bar(stat="identity", fill="steelblue3")+
-  labs(x='', y='n.aziende', title="Questa tecnologia ha agevolato il suo lavoro!")
+  ggplot(aes(x=agevo, y=n))+geom_bar(stat="identity", fill="steelblue3", width = 0.5)+
+  labs(x='', y='n.aziende', title="Questa tecnologia ha agevolato il suo lavoro!")+
+  theme_clean()
 )
 
 
@@ -384,9 +402,9 @@ miglior<-reactive({ dati %>%
     mutate(categoria=factor(categoria, unique(categoria))) %>% 
     ggplot(aes(x=categoria, y=n, fill=risposta))+
     scale_fill_manual(values = c("steelblue", "blue"))+
-    geom_bar(stat = "identity")+labs(title="Cosa è migliorato?",
+    geom_bar(stat = "identity", width = 0.5)+labs(title="Cosa è migliorato?",
                                      y="n.aziende", x='')+
-    coord_flip()})
+    coord_flip()+theme_clean()})
 
 output$pmiglior<-renderPlot(miglior())
 
@@ -414,11 +432,10 @@ output$pinnov<-renderPlot(
     summarise(n=n()) %>% 
     arrange(n) %>% 
     mutate(innov=factor(innov, unique(innov))) %>% 
-    ggplot(aes(x=innov, y=n))+geom_bar(stat="identity", fill="steelblue3")+
-    labs(x="", title="quale innovazione sarebbe più utile?", y='n.aziende')+coord_flip()
-  
-)
-
+    ggplot(aes(x=innov, y=n))+geom_bar(stat="identity", fill="steelblue3", width = 0.5)+
+    labs(x="", title="quale innovazione sarebbe più utile?", y='n.aziende')+coord_flip()+
+    theme_clean()
+  )
 
 
 
