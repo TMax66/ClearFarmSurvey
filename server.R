@@ -82,7 +82,6 @@ output$pruol<-renderPlot(ruol())
   
   #<<<<uso di sensori??##
   sensor<-reactive({
-    
     dati %>% 
       group_by(sensori) %>% 
       summarise(n=n()) %>% 
@@ -90,8 +89,7 @@ output$pruol<-renderPlot(ruol())
       mutate(sensori=factor(sensori, unique(sensori))) %>% 
       ggplot(aes(x=sensori, y=n))+geom_bar(stat="identity", fill="steelblue3", width = 0.5)+
       labs(x="", title="Sensori in azienda?")+coord_flip()+ 
-      theme(axis.text=element_text(size=12))+ width = 0.5
-    
+      theme(axis.text=element_text(size=12))+ theme_clean()
   })
   
   
@@ -181,7 +179,7 @@ output$pruol<-renderPlot(ruol())
   })
   
   
-  #<-non interessato
+  ###<-non interessato
   
   output$noninter <- renderValueBox({
     valueBox(
@@ -329,9 +327,9 @@ amb<-reactive({ dati %>%
     mutate(categoria=factor(categoria, unique(categoria))) %>% 
     ggplot(aes(x=categoria, y=n, fill=risposta))+
     scale_fill_manual(values = c("steelblue", "blue"))+
-    geom_bar(stat = "identity")+labs(title="sensori-dispositivi ambientali",
+    geom_bar(stat = "identity", width = 0.5)+labs(title="sensori-dispositivi ambientali",
                                      y="n.aziende", x='')+
-    coord_flip()})
+    coord_flip()+theme_clean()})
 
 output$pamb<-renderPlot(amb())
 

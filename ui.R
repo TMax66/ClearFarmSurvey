@@ -12,8 +12,6 @@ ui <- dashboardPage(
       menuItem("sezione1", tabName = "risp1", icon = icon("dashboard")),
       menuItem("sezione2", tabName = "risp2", icon = icon("dashboard")),
       menuItem("sezione3", tabName = "risp3", icon = icon("dashboard"))
-     # menuItem("Dati", tabName = "dati", icon = icon("th"))
-      #menuItem("Text mining Analysis", tabName="tm", icon = icon("edit"))
     )
   ),
   dashboardBody(
@@ -101,7 +99,7 @@ ui <- dashboardPage(
           column(6, 
                  plotOutput("pamb")
         )), 
-        
+        hr(),
         fluidRow(
           
           column(6, 

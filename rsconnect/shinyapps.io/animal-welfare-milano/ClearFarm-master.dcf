@@ -5,9 +5,9 @@ account: animal-welfare-milano
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 1829681
-bundleId: 3058355
+bundleId: 3059665
 url: https://animal-welfare-milano.shinyapps.io/ClearFarm-master/
-when: 1587710983.87645
+when: 1587735067.34305
 asMultiple: FALSE
 asStatic: FALSE
 ignoredFiles: .Rprofile|README.md
