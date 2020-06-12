@@ -28,13 +28,80 @@
 
   
 
-nomi<-c("reg","ruolo", "tipo","lattazione", "asciutte", "nmanze","biogas","sensori",
-        "interesse", "noint",  "sambbovlat","sambbovasc","sambmanze","sambvit",
-        "sabovlat","sabovasc","samanze", "savit",
-        "robot","prodmilk","compomilk","condumilk","bcs","healthpam", "pesaut","acrob","al24","al25",
-        "collare","bolo","orecc","pedom","al30", "al31","mov","staz","eat","rumina",
-        "Sbcs","estro","parto","distress","al40","al41","clima", "qair", "altro44", "al45",
-        "temp","umid","co2","nh3","luce", "al51","al52","usedtime","agevo", "qualprod",
+nomi<-c("info",
+        "cons",
+        "reg",
+        "ruolo", 
+        "tipo",
+        "lattazione", 
+        "asciutte", 
+        "nmanze",
+        "biogas",
+        "sensori",
+        "interesse", 
+        "noint", 
+        
+        "sambbovlat",
+        "sambbovasc",
+        "sambmanze",
+        "sambvit",
+        
+        "sabovlat",
+        "sabovasc",
+        "samanze", 
+        "savit",
+          
+        "2sambbovlat",
+        "2sambbovasc",
+        "2sambmanze",
+        "2sambvit",
+        
+        "2sabovlat",
+        "2sabovasc",
+        "2samanze", 
+        "2savit",
+        
+        "collare",
+        "bolorum",
+        "marca",
+        "pedom",
+        "altro33",
+        "al34", 
+        
+        "mov",
+        "staz",
+        "eat",
+        "rumina",
+        "Sbcs",
+        "estro",
+        "parto",
+        "distress",
+        "altro43",
+        "al44",
+        
+        "clima", "qair", "altro47", "al48",
+        
+        "temp","umid","co2","nh3","luce", "altro54","al55",
+        
+        "collare2","bolorum2","marca2","pedom2","altro60","al61", 
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        "robot",
+        "prodmilk","compomilk","condumilk","bcs","healthpam", "pesaut","acrob","al24","al25",
+        
+        ,"usedtime","agevo", "qualprod",
         "welfare","ecoaz","al58","al59","easyuse","innov")
 
 names(dati)<-nomi
