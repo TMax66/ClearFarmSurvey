@@ -11,21 +11,21 @@ server <- function(input, output, session) {
   
   output$hsize <- renderValueBox({
     valueBox(
-      median(dati$lattazione), "Mediana capi in lattazione ",
+      median(dati$lattazione, na.rm = TRUE), "Mediana capi in lattazione ",
       color = "blue"
     )
   })
   
   output$dry <- renderValueBox({
     valueBox(
-      median(dati$asciutte), "Mediana capi in asciutta",
+      median(dati$asciutte,na.rm = TRUE), "Mediana capi in asciutta",
       color = "blue"
     )
   })
   
   output$heif <- renderValueBox({
     valueBox(
-      round(median(dati$nmanze),0), " Mediana n. Manze",
+      round(median(dati$nmanze, na.rm = TRUE),0), " Mediana n. Manze",
       color = "blue"
     )
   })

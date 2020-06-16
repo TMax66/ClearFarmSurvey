@@ -23,7 +23,7 @@
     mydrive<-drive_find(type = "spreadsheet") 
   id<-mydrive[1,2]
   dati<-read_sheet(id$id)
-  dati<-dati[,-1]
+  #dati<-dati[,-1]
         
 
   
@@ -41,43 +41,17 @@ nomi<-c("info",
         "interesse", 
         "noint", 
         
-        "sambbovlat",
-        "sambbovasc",
-        "sambmanze",
-        "sambvit",
+        "sambbovlat", "sambbovasc", "sambmanze","sambvit",
         
-        "sabovlat",
-        "sabovasc",
-        "samanze", 
-        "savit",
+        "sabovlat", "sabovasc", "samanze", "savit",
           
-        "2sambbovlat",
-        "2sambbovasc",
-        "2sambmanze",
-        "2sambvit",
+        "2sambbovlat", "2sambbovasc", "2sambmanze", "2sambvit",
         
-        "2sabovlat",
-        "2sabovasc",
-        "2samanze", 
-        "2savit",
+        "2sabovlat", "2sabovasc", "2samanze", "2savit",
         
-        "collare",
-        "bolorum",
-        "marca",
-        "pedom",
-        "altro33",
-        "al34", 
+        "collare", "bolorum", "marca", "pedom", "altro33", "al34", 
         
-        "mov",
-        "staz",
-        "eat",
-        "rumina",
-        "Sbcs",
-        "estro",
-        "parto",
-        "distress",
-        "altro43",
-        "al44",
+        "mov", "staz", "eat", "rumina", "Sbcs", "estro", "parto", "distress", "altro43", "al44",
         
         "clima", "qair", "altro47", "al48",
         
@@ -85,24 +59,33 @@ nomi<-c("info",
         
         "collare2","bolorum2","marca2","pedom2","altro60","al61", 
         
+        "mov2","staz2", "eat2","rumina2","Sbcs2","estro2","parto2","distress2","altro70","al71",
         
+        "clima2", "qair2", "altro74", "al75",
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+        "temp2","umid2","2co2","2nh3","luce2", "altro81","al82",
         
         "robot",
-        "prodmilk","compomilk","condumilk","bcs","healthpam", "pesaut","acrob","al24","al25",
         
-        ,"usedtime","agevo", "qualprod",
-        "welfare","ecoaz","al58","al59","easyuse","innov")
+        "prodmilk","compomilk","condumilk","bcs","healthpam", "pesaut","acrob", "altro91", "al92", 
+        
+        "usedtime", 
+        
+        "agevo",
+        
+        "qualprod", "welfare","ecoaz", "altro98", "al99", 
+        
+        "easyuse",
+        
+        "lesioni", "rotsens", "lostdata", "internet", "asstecn", "riftecn", "tempogdati", "altro108", "al109",
+        
+        "invest", 
+        
+        "likert", 
+        
+        "invest2", 
+        
+        "innov" )
 
 names(dati)<-nomi
     
