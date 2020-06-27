@@ -4,8 +4,8 @@ server <- function(input, output, session) {
 ####SEZIONE 1##################################################
   output$Quest <- renderValueBox({
     valueBox(
-      dim(dati)[1], "# Questionari", icon = icon("keyboard"),
-      color = "yellow"
+      dim(dati)[1], "Questionari", icon = icon("keyboard"),
+      color = "red"
     )
   })
   
@@ -36,6 +36,7 @@ reg<-reactive({
     dati %>% 
       group_by(reg) %>% 
       summarise(n=n()) %>% 
+    drop_na() %>% 
       arrange(n) %>% 
       mutate(reg=factor(reg, unique(reg))) %>% 
       ggplot(aes(x=reg, y=n))+
@@ -56,6 +57,7 @@ output$preg<-renderPlot(reg())
     dati %>% 
       group_by(ruolo) %>% 
       summarise(n=n()) %>% 
+      drop_na() %>% 
       arrange(n) %>% 
       mutate(ruolo=factor(ruolo, unique(ruolo))) %>% 
       ggplot(aes(x=ruolo, y=n))+
@@ -75,6 +77,7 @@ output$pruol<-renderPlot(ruol())
     dati %>% 
       group_by(tipo) %>% 
       summarise(n=n()) %>% 
+      drop_na() %>% 
       arrange(n) %>% 
       mutate(tipo=factor(tipo, unique(tipo))) %>% 
       ggplot(aes(x=tipo, y=n))+geom_bar(stat="identity", fill="steelblue3", width = 0.6)+
@@ -94,6 +97,7 @@ output$pruol<-renderPlot(ruol())
     dati %>% 
       group_by(sensori) %>% 
       summarise(n=n()) %>% 
+      drop_na() %>% 
       arrange(n) %>% 
       mutate(sensori=factor(sensori, unique(sensori))) %>% 
       ggplot(aes(x=sensori, y=n))+geom_bar(stat="identity", fill="steelblue3", width = 0.6)+
@@ -133,6 +137,7 @@ output$pruol<-renderPlot(ruol())
       group_by(noint) %>% 
       summarise(n=n()) %>% 
       arrange(n) %>% 
+      drop_na() %>% 
       mutate(nonint=factor(noint, unique(noint))) %>% 
       ggplot(aes(x=noint, y=n))+geom_bar(stat="identity", fill="steelblue3", width = 0.6)+
       labs(x="", title="Motivi di mancato interesse")+coord_flip()+ 
@@ -160,8 +165,8 @@ output$pruol<-renderPlot(ruol())
   #<-biogas
   output$gas <- renderValueBox({
     valueBox(
-      table(dati$biogas)[2] , "# aziende con biogas",
-      color = "green"
+      table(dati$biogas)[2] , "aziende con biogas",
+      color = "blue"
     )
   })
   
@@ -171,8 +176,8 @@ output$pruol<-renderPlot(ruol())
       dati %>% 
         select(sensori) %>% 
         filter(sensori!="No") %>% 
-        summarise(n=n()), "# aziende che utilizzano sensori",
-      color = "red"
+        summarise(n=n()), "aziende che utilizzano sensori",
+      color = "blue"
     )
   })
   
@@ -187,24 +192,24 @@ output$pruol<-renderPlot(ruol())
         filter(sensori=="No") %>% 
         select(interesse) %>% 
         filter(interesse!="No") %>% 
-        summarise(n=n()), "# aziende interessate all'uso di sensori",
-      color = "red"
+        summarise(n=n()), "aziende interessate all'uso di sensori",
+      color = "blue"
     )
   })
   
   
   ###<-non interessato
   
-  output$noninter <- renderValueBox({
-    valueBox(
-      dati %>% 
-        filter(sensori=="No") %>% 
-        select(interesse) %>% 
-        filter(interesse=="No") %>% 
-        summarise(n=n()), "# aziende non interessate all'uso di sensori",
-      color = "red"
-    )
-  })
+  # output$noninter <- renderValueBox({
+  #   valueBox(
+  #     dati %>% 
+  #       filter(sensori=="No") %>% 
+  #       select(interesse) %>% 
+  #       filter(interesse=="No") %>% 
+  #       summarise(n=n()), "aziende non interessate all'uso di sensori",
+  #     color = "blue"
+  #   )
+  # })
   
   
   
@@ -420,8 +425,8 @@ output$pBsamb3<-renderPlot(Bsamb3())
 ####sensori animali######
 Bsanim<-reactive({ dati %>% 
     #filter(sensori!="No") %>% 
-    select(21:24) %>% rename('bov in lattazione'= sambbovlat2, 'bov in asciutta'=sambbovasc2, 
-                             'manze'=sambmanze2, 'vitelle'= sambvit2) %>% 
+    select(25:28) %>% rename('bov da latte'=sabovlat2, 'bov in asciutta'=sabovasc2, 
+                             'manze'=samanze2, 'vitelle'=savit2) %>% 
     pivot_longer(1:4, names_to = "categoria", values_to = "risposta") %>% 
     group_by(categoria, risposta) %>% 
     summarise(n=n()) %>% 
@@ -432,7 +437,7 @@ Bsanim<-reactive({ dati %>%
     geom_bar(stat = "identity",width = 0.6)+
     geom_text(position=position_stack(vjust=0.5),color="yellow", size=5)+
     coord_flip()+theme_clean()+
-    labs(title="per quale categoria di animali sono installati?",
+    labs(title="su quali categorie di animali sono applicati?",
          y="n.aziende", x='')
   
   
@@ -441,77 +446,75 @@ Bsanim<-reactive({ dati %>%
 output$pBsanim<-renderPlot(Bsanim())
 
 
+Bsanim2<-reactive({ dati %>% 
+    #filter(sensori!="No") %>% 
+    select(29:33) %>% rename('collare'=collare, 'bolo ruminale'=bolorum, 
+                             'marca auricolare'=marca, 'pedometro'=pedom,
+                             'altro'=altro33) %>% 
+    pivot_longer(1:4, names_to = "categoria", values_to = "risposta") %>% 
+    group_by(categoria, risposta) %>% 
+    summarise(n=n()) %>% 
+    drop_na() %>% 
+    mutate(risposta=factor(risposta)) %>% 
+    ggplot(aes(x=categoria, y=n, fill=risposta, label=n))+
+    scale_fill_brewer(palette="Paired")+
+    geom_bar(stat = "identity",width = 0.6)+
+    geom_text(position=position_stack(vjust=0.5),color="yellow", size=5)+
+    coord_flip()+theme_clean()+
+    labs(title="tipologia di dispostivi applicati",
+         y="n.aziende", x='')
+  
+  
+})
+
+output$pBsanim2<-renderPlot(Bsanim2())
 
 
 
+Bsanim3<-reactive({ dati %>% 
+    #filter(sensori!="No") %>% 
+    select(35:43) %>% rename('movimento'=mov, 'stazione/decubito'= staz ,
+                             'se si alimenta'= eat, 'se rumina' = rumina, 
+                             'BCS'=Sbcs, 'se è in estro'=estro, 'se deve partorire'=parto,
+                             'distress termico'=distress, 
+                             "altro"=altro43) %>% 
+    pivot_longer(1:9, names_to = "categoria", values_to = "risposta") %>% 
+    group_by(categoria, risposta) %>% 
+    summarise(n=n()) %>% 
+    drop_na() %>% 
+    mutate(risposta=factor(risposta)) %>% 
+    ggplot(aes(x=categoria, y=n, fill=risposta, label=n))+
+    scale_fill_brewer(palette="Paired")+
+    geom_bar(stat = "identity",width = 0.6)+
+    geom_text(position=position_stack(vjust=0.5),color="yellow", size=5)+
+    coord_flip()+theme_clean()+
+    labs(title="quali parametri rilevano i sensori applicati?",
+         y="n.aziende", x='')
 
+})
 
+output$pBsanim3<-renderPlot(Bsanim3())
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#####sezione robot #################
 
 
 output$robott <- renderValueBox({
   valueBox(
-    table(dati$robot)[2] , "# aziende che utilizzano robot di mungitura",
+    table(dati$robot)[2] , "aziende  utilizzano robot di mungitura",
     color = "blue"
   )
 })
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 inforobo<-reactive({ dati %>% 
-    filter(robot=="Sì") %>% 
-    select(20:27) %>% rename('produzione latte'=prodmilk,'composizione latte'=compomilk ,
+    #filter(robot=="Sì") %>% 
+    select(84:91) %>% rename('produzione latte'=prodmilk,'composizione latte'=compomilk ,
                              'conducibilità'= condumilk, 'BCS'= bcs,
                              "parametri sanitari"=healthpam, "pesatura autom"=pesaut, 
-                             "accesso al robot"=acrob,"altro"=al24) %>% 
+                             "accesso al robot"=acrob,"altro"=altro91) %>% 
     pivot_longer(1:8, names_to = "categoria", values_to = "risposta") %>% 
     group_by(categoria, risposta) %>% 
     summarise(n=n()) %>% 
+    drop_na() %>% 
     ungroup() %>% 
     arrange(desc(n))%>% 
     mutate(categoria=factor(categoria, unique(categoria))) %>% 
@@ -621,117 +624,160 @@ output$pambpr<-renderPlot(ambpr())
 
 
 
+#####sezione 5######
+
+output$easy <- renderValueBox({
+  valueBox(
+    dati %>%
+      filter(sensori!="No") %>%
+      select(easyuse) %>%
+      filter(easyuse=="Sì") %>%
+      summarise(n=n()), "aziende ritengono i dati raccolti di facile utilizzo",
+    color = "blue"
+  )
+})
+
+output$cb <- renderValueBox({
+  valueBox(
+    dati %>%
+      filter(sensori!="No") %>%
+      select(invest) %>%
+      filter(invest=="Sì") %>%
+      summarise(n=n()), "aziende rifarebbero l'investimento",
+    color = "blue"
+  )
+})
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-######SEZIONE 3########################################
 
 
 
 output$ptuso<-renderPlot(
   
   dati %>% 
-    filter(sensori!="No")%>% 
+    # filter(sensori!="No")%>% 
     group_by(usedtime) %>% 
     summarise(n=n()) %>% 
+    drop_na() %>% 
     arrange(n) %>% 
     mutate(usedtime=factor(usedtime, unique(usedtime))) %>% 
     ggplot(aes(x=usedtime, y=n))+geom_bar(stat="identity", fill="steelblue3", width = 0.6)+
     labs(x="", title="Da quanto tempo usa questa tecnologia", y='n.aziende')+coord_flip()+
     theme_clean()+
     geom_text(aes(y=n, label=n), hjust=2, 
-             color="yellow", size=5)
+              color="yellow", size=5)
+  
 
 )
 
 
 
-output$likert<-renderPlot(
+output$agevo<-renderPlot(
  
-dati %>% 
-  filter(sensori!="No")%>% 
-  select(agevo) %>% 
-  mutate(agevo=factor(agevo, levels=c("Non sono d'accordo", "Sono poco d'accordo",
-                                       "Sono d'accordo", "Sono molto d'accordo", 
-                                       "Sono totalmente d'accordo"))) %>% 
-  group_by(agevo) %>% 
-  summarise(n=n()) %>% 
-  ggplot(aes(x=agevo, y=n))+geom_bar(stat="identity", fill="steelblue3", width = 0.6)+
-  labs(x='', y='n.aziende', title="Questa tecnologia ha agevolato il suo lavoro!")+
-  theme_clean()+
-  geom_text(aes(y=n, label=n), vjust=2, 
-            color="yellow", size=5)
+  dati %>% 
+    #filter(sensori!="No")%>% 
+    select(agevo) %>% 
+    mutate(agevo=factor(agevo, levels=c("Per niente d'accordo", "Poco d'accordo",
+                                        "D'accordo", "Molto d'accordo", 
+                                        "Totalmente d'accordo"))) %>% 
+    group_by(agevo) %>% 
+    summarise(n=n()) %>% 
+    drop_na() %>% 
+    ggplot(aes(x=agevo, y=n))+geom_bar(stat="identity", fill="steelblue3", width = 0.6)+
+    labs(x='', y='n.aziende', title="Questa tecnologia ha agevolato il suo lavoro!")+
+    theme_clean()+
+    geom_text(aes(y=n, label=n), vjust=2, 
+              color="yellow", size=5)
+  
 )
 
 
 miglior<-reactive({ dati %>% 
-    filter(sensori!="No") %>% 
-    select(58:61) %>% rename('qualità produzione'=qualprod, 'benessere'=welfare, 
-                             'economia aziendale'=ecoaz, "altro"=al58) %>% 
+   # filter(sensori!="No") %>% 
+    select(95:98) %>% rename('qualità produzione'=qualprod, 'benessere'=welfare, 
+                             'economia aziendale'=ecoaz, "altro"=altro98) %>% 
     pivot_longer(1:4, names_to = "categoria", values_to = "risposta") %>% 
     group_by(categoria, risposta) %>% 
     summarise(n=n()) %>% 
+    drop_na() %>% 
     ungroup() %>% 
-    arrange(desc(n)) %>% 
+    arrange(n) %>% 
     mutate(categoria=factor(categoria, unique(categoria))) %>% 
     ggplot(aes(x=categoria, y=n, fill=risposta, label=n))+
     scale_fill_brewer(palette="Paired")+
     geom_bar(stat = "identity",width = 0.6)+
     geom_text(position=position_stack(vjust=0.5),color="yellow", size=4.2)+
     labs(title="Cosa è migliorato?",
-                                     y="n.aziende", x='')+
-    coord_flip()+theme_clean()})
+         y="n.aziende", x='')+
+    coord_flip()+theme_clean()
+})
 
 output$pmiglior<-renderPlot(miglior())
 
-output$easy <- renderValueBox({
-  valueBox(
-    dati %>% 
-      filter(sensori!="No") %>% 
-      select(easyuse) %>% 
-      filter(easyuse=="Sì") %>% 
-      summarise(n=n()), "# aziende ritengono i dati raccolti di facile utilizzo",
-    color = "red"
-  )
+problem<-reactive({ dati %>% 
+    
+    select(101:108) %>% rename('lesioni'=lesioni, 'perdita/rottura sensore'=rotsens, 'perdita dati'=lostdata,
+                               'copertura internet'=internet, 'scarsa ass.tecnica'=asstecn, 'rifiuti tecnologici'=riftecn,
+                               'tempo per gestione dati'= tempogdati, "altro"=altro108) %>% 
+    pivot_longer(1:8, names_to = "categoria", values_to = "risposta") %>% 
+    group_by(categoria, risposta) %>% 
+    summarise(n=n()) %>% 
+    drop_na() %>% 
+    ungroup() %>% 
+    arrange(n) %>% 
+    mutate(categoria=factor(categoria, unique(categoria))) %>% 
+    ggplot(aes(x=categoria, y=n, fill=risposta, label=n))+
+    scale_fill_brewer(palette="Paired")+
+    geom_bar(stat = "identity",width = 0.6)+
+    geom_text(position=position_stack(vjust=0.5),color="yellow", size=4.2)+
+    labs(title="Quali problematiche ha riscontrato?",
+         y="n.aziende", x='')+
+    coord_flip()+theme_clean()
 })
 
-output$pinnov<-renderPlot(
+output$pproblem<-renderPlot(problem())
+
+
+output$plikert<-renderPlot(
   
   dati %>% 
-    filter(sensori!="No") %>% 
-    select(innov) %>%
-    mutate( innov=recode(innov, `Avere un riscontro immediato di un cambiamento nel comportamento dell’animale`='riscontro immediato del comportamento',
-                              `Usare più sensori integrati contemporaneamente`='usare più sensori',
-                         `Avere un riscontro immediato dello stato di benessere degli animali`="riscontro immediato del benessere"
-                         )) %>% 
-    group_by(innov) %>% 
+    #filter(sensori!="No")%>% 
+    select(likert) %>% 
+    mutate(likert=factor(likert, levels=c("Per niente d'accordo", "Poco d'accordo",
+                                          "D'accordo", "Molto d'accordo", 
+                                          "Totalmente d'accordo"))) %>% 
+    group_by(likert) %>% 
     summarise(n=n()) %>% 
-    arrange(n) %>% 
-    mutate(innov=factor(innov, unique(innov))) %>% 
+    drop_na() %>% 
+    ggplot(aes(x=likert, y=n))+geom_bar(stat="identity", fill="steelblue3", width = 0.6)+
+    labs(x='', y='n.aziende', title="Sostituire i sensori sugli animali con una tecnologia diversa")+
+    theme_clean()+
+    geom_text(aes(y=n, label=n), vjust=2, 
+              color="yellow", size=5)
+  
+)
+
+output$pinnov<-renderPlot(
+
+  dati %>%
+    #filter(sensori!="No") %>%
+    select(innov) %>%
+    mutate(innov=recode(innov, `Usare più sensori integrati contemporaneamente` = 'usare più sensori contemp',
+                         `Avere un riscontro immediato di un cambiamento nel comportamento dell’animale` = 'riscontro immediato del comportamento',
+                         `Avere un riscontro immediato dello stato di benessere e di salute degli animali` = 'riscontro immediato benessere/salute')) %>%
+    group_by(innov) %>%
+    summarise(n=n()) %>%
+    drop_na() %>% 
+    arrange(n) %>%
+    mutate(innov=factor(innov, unique(innov))) %>%
     ggplot(aes(x=innov, y=n))+geom_bar(stat="identity", fill="steelblue3", width = 0.6)+
     labs(x="", title="quale innovazione sarebbe più utile?", y='n.aziende')+coord_flip()+
     theme_clean()+
-    geom_text(aes(y=n, label=n), hjust=2, 
+    geom_text(aes(y=n, label=n), hjust=2,
               color="yellow", size=5)
   )
+
 
 
 

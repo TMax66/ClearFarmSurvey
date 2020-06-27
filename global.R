@@ -86,6 +86,8 @@ nomi<-c("info",
         "innov" ) #d44
 
 names(dati)<-nomi
+
+dati$reg<-casefold(dati$reg, upper=TRUE)
     
 
 

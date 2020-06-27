@@ -9,9 +9,11 @@ ui <- dashboardPage(
       menuItem("Introduzione", tabName = "intro", icon = icon("th")),
       hr(),
       p("Visualizza i risultati"),
-      menuItem("Quadro generale", tabName = "risp1", icon = icon("dashboard")),
+      menuItem("Informazioni generali", tabName = "risp1", icon = icon("dashboard")),
       menuItem("Sensori amb o anim", tabName = "risp2", icon = icon("dashboard")),
-      menuItem("Sensori amb e anim", tabName = "risp3", icon = icon("dashboard"))
+      menuItem("Sensori amb e anim", tabName = "risp3", icon = icon("dashboard")),
+      menuItem("Robot di mungitura", tabName = "risp4", icon = icon("dashboard")), 
+      menuItem("Esperienza e valutazione", tabName = "risp5", icon = icon("dashboard"))
     )
   ),
   dashboardBody(
@@ -82,6 +84,8 @@ ui <- dashboardPage(
                   ######sensori ambientali#####
               tabPanel( "Utilizzo esclusivo di sensori ambientali" , 
                         fluidPage( 
+                          tags$h5(tags$b("In questa sezione sono riportate le risposte relative alle aziende che 
+                                  utilizzano esclusivamente sensori ambientali")), 
                  fluidRow(
                   box( width = 6, 
                    plotOutput("psamb")),
@@ -93,6 +97,8 @@ ui <- dashboardPage(
                         )), 
                    #####sensori animali####
               tabPanel(" Utilizzo esclusivo di sensori su animali",
+                       tags$h5(tags$b("In questa sezione sono riportate le risposte relative alle aziende che 
+                                  utilizzano esclusivamente sensori su animali")), 
                        fluidRow(
                          box(width=6, 
                           plotOutput("psanim")),
@@ -112,6 +118,8 @@ ui <- dashboardPage(
              tabBox(title="",width = 12, 
                     ####sensori ambientali####
             tabPanel("sensori ambientali",
+                     tags$h5(tags$b("In questa sezione sono riportate le risposte in merito ai sensori ambientali 
+                     in aziende che utilizzano sia sensori ambientali sia applicati su animali")), 
               fluidRow(
                 box(
                   plotOutput("pBsamb")), 
@@ -124,20 +132,86 @@ ui <- dashboardPage(
                 )
               )
                   
-                )
-              )
-            ), 
-                 ####sensori animali###
+                ), 
+            ####sensori animali###
             tabPanel("sensori animali", 
-                fluidRow(
-                  box(
-                    plotOutput("pBsanim")
-                  )
-                  
-                )
+                     tags$h5(tags$b("In questa sezione sono riportate le risposte in merito ai sensori animali
+                     in aziende che utilizzano sia sensori ambientali sia applicati su animali")), 
+                     fluidRow(
+                       box(
+                         plotOutput("pBsanim")
+                       ),
+                       box(
+                         plotOutput("pBsanim2")
+                       )
+                       
+                     ), 
+                     fluidRow(
+                       box(
+                         plotOutput("pBsanim3")
+                       )
+                     )))) 
+
+             ), 
+             
+      tabItem(
+        tabName = "risp4",
+            fluidPage(
+              
+              column(3, 
+              valueBoxOutput("robott", width = NULL)
+              ), 
+              column(9, 
+                     plotOutput("pinforobo"))
+              
             )
-               
-             )
+        ), 
+      
+      tabItem(
+        tabName = "risp5",
+        
+        fluidPage(
+          fluidRow(
+            column(6, 
+            valueBoxOutput("easy", width = NULL)), 
+            column(6, 
+            valueBoxOutput("cb", width = NULL))
+                   ), 
+          hr(), 
+          br(), 
+          
+          fluidRow(
+            column(6,
+                  plotOutput("ptuso")),
+            column(6,
+                  plotOutput("agevo"))
+                    ) ,
+          hr(), 
+          br(), 
+          fluidRow(
+            column(6,
+              plotOutput("pmiglior")),
+            column(6,
+               plotOutput("pproblem"))
+          ), 
+           hr(),
+           br(),
+          fluidRow(
+            column(6,
+                   plotOutput("plikert")),
+            column(6,
+                   plotOutput("pinnov"))
+          )
+
+          )
+
+
+        )
+      )
+      
+      
+      
+      
            )
       )
       
@@ -148,32 +222,11 @@ ui <- dashboardPage(
       
       
       
-      )
+     
+ 
                 
-                 #valueBoxOutput("robott", width = NULL),
-                  
-                 
-          # column(6, 
-          #       # valueBoxOutput("norobot", width = NULL),
-          #        plotOutput("pnorob"))
-    
-        # hr(),
-        # fluidRow(
-        #   
-        #   column(6, 
-        #          plotOutput("panpar")),
-        #   column(6, 
-        #          plotOutput("pamb")
-    
-       
-      #  ), 
-      #   hr(),
-      #   fluidRow(
-      #     
-      #     column(6, 
-      #            plotOutput("pambpr"))
-      #         )
-      #         ), 
+                
+
       # tabItem(tabName = "risp3",
       #         
       #         fluidRow(

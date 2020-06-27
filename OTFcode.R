@@ -1,19 +1,24 @@
-dati %>% 
-  #filter(sensori!="No") %>% 
-  select(25:28) %>% rename('bov da latte'=sabovlat2, 'bov in asciutta'=sabovasc2, 
-                           'manze'=samanze2, 'vitelle'=savit2) %>% 
-  pivot_longer(1:4, names_to = "categoria", values_to = "risposta") %>% 
-  group_by(categoria, risposta) %>% 
-  summarise(n=n()) %>% 
+dati %>%
+  #filter(sensori!="No") %>%
+  select(innov) %>%
+  # mutate( innov=recode(innov, `Usare più sensori integrati contemporaneamente` = 'usare più sensori contemp',
+  #                      
+  #                      `Avere un riscontro immediato di un cambiamento nel comportamento dell’animale`='riscontro immediato del comportamento',
+  #                      
+  #                      `Avere un riscontro immediato dello stato di benessere degli animali` = 'riscontro immediato del benessere')) %>%
+  group_by(innov) %>%
+  summarise(n=n()) %>%
   drop_na() %>% 
-  mutate(risposta=factor(risposta)) %>% 
-  ggplot(aes(x=categoria, y=n, fill=risposta, label=n))+
-  scale_fill_brewer(palette="Paired")+
-  geom_bar(stat = "identity",width = 0.6)+
-  geom_text(position=position_stack(vjust=0.5),color="yellow", size=5)+
-  coord_flip()+theme_clean()+
-  labs(title="su quali categorie di animali sono applicati i sensori?",
-       y="n.aziende", x='')
+  arrange(n) %>%
+  mutate(innov=factor(innov, unique(innov))) %>%
+  ggplot(aes(x=innov, y=n))+geom_bar(stat="identity", fill="steelblue3", width = 0.6)+
+  labs(x="", title="quale innovazione sarebbe più utile?", y='n.aziende')+coord_flip()+
+  theme_clean()+
+  geom_text(aes(y=n, label=n), hjust=2,
+            color="yellow", size=5)
+ 
+
+
 
 
  
