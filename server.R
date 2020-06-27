@@ -130,7 +130,6 @@ output$pruol<-renderPlot(ruol())
   nonint<-reactive({
     
     dati %>% 
-      filter(interesse=="No") %>% 
       group_by(noint) %>% 
       summarise(n=n()) %>% 
       arrange(n) %>% 
@@ -209,22 +208,23 @@ output$pruol<-renderPlot(ruol())
   
   
   
- #########SEZIONE 2################################
-
+#########SEZIONE 2################################
+####sensori ambientali####
 samb<-reactive({ dati %>% 
     filter(sensori!="No") %>% 
-    select(11:14) %>% rename('bov in lattazione'=sambbovlat, 'bov in asciutta'=sambbovasc ,
+    select(13:16) %>% rename('bov in lattazione'=sambbovlat, 'bov in asciutta'=sambbovasc ,
                              'manze'= sambmanze, 'vitelli'= sambvit) %>% 
     pivot_longer(1:4, names_to = "categoria", values_to = "risposta") %>% 
     group_by(categoria, risposta) %>% 
     summarise(n=n()) %>% 
+    drop_na() %>% 
     mutate(risposta=factor(risposta)) %>% 
     ggplot(aes(x=categoria, y=n, fill=risposta, label=n))+
     scale_fill_brewer(palette="Paired")+
     geom_bar(stat = "identity",width = 0.6)+
     geom_text(position=position_stack(vjust=0.5),color="yellow", size=5)+
     coord_flip()+theme_clean()+
-    labs(title="Utilizzo sensori ambientali (cat.animali)",
+    labs(title="Su quali categorie di animali sono installati",
          y="n.aziende", x='')
   
     
@@ -232,28 +232,241 @@ samb<-reactive({ dati %>%
 
 output$psamb<-renderPlot(samb())
 
-
-sanim<-reactive({ dati %>% 
-    filter(sensori!="No") %>% 
-    select(15:18) %>% rename('bov in lattazione'=sabovlat, 'bov in asciutta'=sabovasc ,
-                             'manze'= samanze, 'vitelli'= savit) %>% 
-    pivot_longer(1:4, names_to = "categoria", values_to = "risposta") %>% 
+samb2<-reactive({ dati %>% 
+    #filter(sensori!="No") %>% 
+    select(72:74) %>% rename('clima'=clima2, 'qualità aria'= qair2 ,
+                             'altro'= altro74) %>% 
+    pivot_longer(1:3, names_to = "categoria", values_to = "risposta") %>% 
     group_by(categoria, risposta) %>% 
     summarise(n=n()) %>% 
-    ungroup() %>% 
-    arrange(n) %>% 
-    mutate(categoria=factor(categoria, unique(categoria))) %>% 
+    drop_na() %>% 
+    mutate(risposta=factor(risposta)) %>% 
     ggplot(aes(x=categoria, y=n, fill=risposta, label=n))+
     scale_fill_brewer(palette="Paired")+
-    geom_bar(stat = "identity", width = 0.6)+
-    labs(title="Utilizzo sensori su animali",
-    y="n.aziende", x='')+
+    geom_bar(stat = "identity",width = 0.6)+
     geom_text(position=position_stack(vjust=0.5),color="yellow", size=5)+
-    coord_flip()+theme_clean()
+    coord_flip()+theme_clean()+
+    labs(title="Tipologia di sensori ambientali utilizzati",
+         y="n.aziende", x='')
+
+})
+
+output$psamb2<-renderPlot(samb2())
+
+
+samb3<-reactive({ dati %>% 
+    #filter(sensori!="No") %>% 
+    select(76:81) %>% rename('temperatura'=temp2, 'umidità'= umid2 ,
+                             'CO2'= bco2, 'NH3' = bnh3,
+                             'luce'=luce2, 'altro'= altro81) %>% 
+    pivot_longer(1:6, names_to = "categoria", values_to = "risposta") %>% 
+    group_by(categoria, risposta) %>% 
+    summarise(n=n()) %>% 
+    drop_na() %>% 
+    mutate(risposta=factor(risposta)) %>% 
+    ggplot(aes(x=categoria, y=n, fill=risposta, label=n))+
+    scale_fill_brewer(palette="Paired")+
+    geom_bar(stat = "identity",width = 0.6)+
+    geom_text(position=position_stack(vjust=0.5),color="yellow", size=5)+
+    coord_flip()+theme_clean()+
+    labs(title="Parametri rilevati",
+         y="n.aziende", x='')
   
 })
 
+output$psamb3<-renderPlot(samb3())
+
+####sensori animali####
+
+sanim<-reactive({ dati %>% 
+    #filter(sensori!="No") %>% 
+    select(17:20) %>% rename('bov in lattazione'=sabovlat, 'bov in asciutta'= sabovasc ,
+                             'manze'= samanze, 'vitelle' = savit) %>% 
+    pivot_longer(1:4, names_to = "categoria", values_to = "risposta") %>% 
+    group_by(categoria, risposta) %>% 
+    summarise(n=n()) %>% 
+    drop_na() %>% 
+    mutate(risposta=factor(risposta)) %>% 
+    ggplot(aes(x=categoria, y=n, fill=risposta, label=n))+
+    scale_fill_brewer(palette="Paired")+
+    geom_bar(stat = "identity",width = 0.6)+
+    geom_text(position=position_stack(vjust=0.5),color="yellow", size=5)+
+    coord_flip()+theme_clean()+
+    labs(title="categorie di animali con sensori applicati",
+         y="n.aziende", x='')
+})
+
 output$psanim<-renderPlot(sanim())
+
+
+sanim2<-reactive({ dati %>% 
+    #filter(sensori!="No") %>% 
+    select(56:60) %>% rename('collare'=collare2, 'bolo ruminale'= bolorum2 ,
+                             'marca auricolare'= marca2, 'pedometro' = pedom2, "altro"=altro60) %>% 
+    pivot_longer(1:5, names_to = "categoria", values_to = "risposta") %>% 
+    group_by(categoria, risposta) %>% 
+    summarise(n=n()) %>% 
+    drop_na() %>% 
+    mutate(risposta=factor(risposta)) %>% 
+    ggplot(aes(x=categoria, y=n, fill=risposta, label=n))+
+    scale_fill_brewer(palette="Paired")+
+    geom_bar(stat = "identity",width = 0.6)+
+    geom_text(position=position_stack(vjust=0.5),color="yellow", size=5)+
+    coord_flip()+theme_clean()+
+    labs(title="tipologia sensori applicati sugli animali",
+         y="n.aziende", x='')
+  
+})
+
+output$psanim2<-renderPlot(sanim2())
+
+sanim3<-reactive({ dati %>% 
+    #filter(sensori!="No") %>% 
+    select(62:70) %>% rename('movimento'=mov2, 'stazione/decubito'= staz2 ,
+                             'se si alimenta'= eat2, 'se rumina' = rumina2, 
+                             'BCS'=Sbcs2, 'se è in estro'=estro2, 'se deve partorire'=parto2,
+                             'distress termico'=distress2, 
+                             "altro"=altro70) %>% 
+    pivot_longer(1:9, names_to = "categoria", values_to = "risposta") %>% 
+    group_by(categoria, risposta) %>% 
+    summarise(n=n()) %>% 
+    drop_na() %>% 
+    mutate(risposta=factor(risposta)) %>% 
+    ggplot(aes(x=categoria, y=n, fill=risposta, label=n))+
+    scale_fill_brewer(palette="Paired")+
+    geom_bar(stat = "identity",width = 0.6)+
+    geom_text(position=position_stack(vjust=0.5),color="yellow", size=5)+
+    coord_flip()+theme_clean()+
+    labs(title="quali parametri vengono rilevati sugli animali?",
+         y="n.aziende", x='')
+  
+})
+
+output$psanim3<-renderPlot(sanim3())
+
+
+###########SEZIONE 3##################
+####sensori ambientali######
+Bsamb<-reactive({ dati %>% 
+    #filter(sensori!="No") %>% 
+    select(21:24) %>% rename('bov in lattazione'= sambbovlat2, 'bov in asciutta'=sambbovasc2, 
+                             'manze'=sambmanze2, 'vitelle'= sambvit2) %>% 
+    pivot_longer(1:4, names_to = "categoria", values_to = "risposta") %>% 
+    group_by(categoria, risposta) %>% 
+    summarise(n=n()) %>% 
+    drop_na() %>% 
+    mutate(risposta=factor(risposta)) %>% 
+    ggplot(aes(x=categoria, y=n, fill=risposta, label=n))+
+    scale_fill_brewer(palette="Paired")+
+    geom_bar(stat = "identity",width = 0.6)+
+    geom_text(position=position_stack(vjust=0.5),color="yellow", size=5)+
+    coord_flip()+theme_clean()+
+    labs(title="per quale categoria di animali sono installati?",
+         y="n.aziende", x='')
+  
+  
+})
+
+output$pBsamb<-renderPlot(Bsamb())
+
+
+Bsamb2<-reactive({ dati %>% 
+    #filter(sensori!="No") %>% 
+    select(45:47) %>% rename('clima'= clima, 'qualità aria'=qair, 
+                             'altro'=altro47) %>% 
+    pivot_longer(1:3, names_to = "categoria", values_to = "risposta") %>% 
+    group_by(categoria, risposta) %>% 
+    summarise(n=n()) %>% 
+    drop_na() %>% 
+    mutate(risposta=factor(risposta)) %>% 
+    ggplot(aes(x=categoria, y=n, fill=risposta, label=n))+
+    scale_fill_brewer(palette="Paired")+
+    geom_bar(stat = "identity",width = 0.6)+
+    geom_text(position=position_stack(vjust=0.5),color="yellow", size=5)+
+    coord_flip()+theme_clean()+
+    labs(title="tipologia di dispositivi/sensori ambientali",
+         y="n.aziende", x='')
+  
+  
+})
+
+output$pBsamb2<-renderPlot(Bsamb2())
+
+
+Bsamb3<-reactive({ dati %>% 
+    #filter(sensori!="No") %>% 
+    select(49:54) %>% rename('temperatura'=temp, 'umidità'=umid, 'CO2'=co2, 
+                             'NH3'=nh3, 'illuminazione'=luce, 
+                             'altro'=altro54) %>% 
+    pivot_longer(1:6, names_to = "categoria", values_to = "risposta") %>% 
+    group_by(categoria, risposta) %>% 
+    summarise(n=n()) %>% 
+    drop_na() %>% 
+    mutate(risposta=factor(risposta)) %>% 
+    ggplot(aes(x=categoria, y=n, fill=risposta, label=n))+
+    scale_fill_brewer(palette="Paired")+
+    geom_bar(stat = "identity",width = 0.6)+
+    geom_text(position=position_stack(vjust=0.5),color="yellow", size=5)+
+    coord_flip()+theme_clean()+
+    labs(title="parametri rilevati da dispositivi/sensori ambientali",
+         y="n.aziende", x='')
+  
+  
+})
+
+output$pBsamb3<-renderPlot(Bsamb3())
+
+
+####sensori animali######
+Bsanim<-reactive({ dati %>% 
+    #filter(sensori!="No") %>% 
+    select(21:24) %>% rename('bov in lattazione'= sambbovlat2, 'bov in asciutta'=sambbovasc2, 
+                             'manze'=sambmanze2, 'vitelle'= sambvit2) %>% 
+    pivot_longer(1:4, names_to = "categoria", values_to = "risposta") %>% 
+    group_by(categoria, risposta) %>% 
+    summarise(n=n()) %>% 
+    drop_na() %>% 
+    mutate(risposta=factor(risposta)) %>% 
+    ggplot(aes(x=categoria, y=n, fill=risposta, label=n))+
+    scale_fill_brewer(palette="Paired")+
+    geom_bar(stat = "identity",width = 0.6)+
+    geom_text(position=position_stack(vjust=0.5),color="yellow", size=5)+
+    coord_flip()+theme_clean()+
+    labs(title="per quale categoria di animali sono installati?",
+         y="n.aziende", x='')
+  
+  
+})
+
+output$pBsanim<-renderPlot(Bsanim())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 output$robott <- renderValueBox({
@@ -262,6 +475,33 @@ output$robott <- renderValueBox({
     color = "blue"
   )
 })
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 inforobo<-reactive({ dati %>% 
     filter(robot=="Sì") %>% 
@@ -378,6 +618,29 @@ ambpr<-reactive({ dati %>%
     coord_flip()+theme_clean()})
 
 output$pambpr<-renderPlot(ambpr())
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ######SEZIONE 3########################################
 

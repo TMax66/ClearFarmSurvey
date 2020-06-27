@@ -29,68 +29,64 @@
   
 
 nomi<-c("info",
-        "cons",
-        "reg",
-        "ruolo", 
-        "tipo",
-        "lattazione", 
-        "asciutte", 
-        "nmanze",
-        "biogas",
-        "sensori",
-        "interesse", 
-        "noint", 
+        "cons", #<-d1
+        "reg", #<-d2
+        "ruolo", #<-d3
+        "tipo", #<-d4
+        "lattazione", #d5
+        "asciutte", #d6
+        "nmanze", #d7
+        "biogas", #d8
+        "sensori", #d9
+        "interesse", #d10
+        "noint", # d11
         
-        "sambbovlat", "sambbovasc", "sambmanze","sambvit",
+        "sambbovlat", "sambbovasc", "sambmanze","sambvit",  #<--d12
         
-        "sabovlat", "sabovasc", "samanze", "savit",
+        "sabovlat", "sabovasc", "samanze", "savit", #<--d13
           
-        "2sambbovlat", "2sambbovasc", "2sambmanze", "2sambvit",
+        "sambbovlat2", "sambbovasc2", "sambmanze2", "sambvit2", #<---d14
         
-        "2sabovlat", "2sabovasc", "2samanze", "2savit",
+        "sabovlat2", "sabovasc2", "samanze2", "savit2", #<---d15
         
-        "collare", "bolorum", "marca", "pedom", "altro33", "al34", 
+        "collare", "bolorum", "marca", "pedom", "altro33", "al34", #<---d16
         
-        "mov", "staz", "eat", "rumina", "Sbcs", "estro", "parto", "distress", "altro43", "al44",
+        "mov", "staz", "eat", "rumina", "Sbcs", "estro", "parto", "distress", "altro43", "al44", #<---d18
         
-        "clima", "qair", "altro47", "al48",
+        "clima", "qair", "altro47", "al48", #<---d20
         
-        "temp","umid","co2","nh3","luce", "altro54","al55",
+        "temp","umid","co2","nh3","luce", "altro54","al55", #<---d22
         
-        "collare2","bolorum2","marca2","pedom2","altro60","al61", 
+        "collare2","bolorum2","marca2","pedom2","altro60","al61", #<---d24
         
-        "mov2","staz2", "eat2","rumina2","Sbcs2","estro2","parto2","distress2","altro70","al71",
+        "mov2","staz2", "eat2","rumina2","Sbcs2","estro2","parto2","distress2","altro70","al71", #<---d26
         
-        "clima2", "qair2", "altro74", "al75",
+        "clima2", "qair2", "altro74", "al75", #<---d28
         
-        "temp2","umid2","2co2","2nh3","luce2", "altro81","al82",
+        "temp2","umid2","bco2","bnh3","luce2", "altro81","al82", #<---d30
         
-        "robot",
+        "robot", #d32
         
-        "prodmilk","compomilk","condumilk","bcs","healthpam", "pesaut","acrob", "altro91", "al92", 
+        "prodmilk","compomilk","condumilk","bcs","healthpam", "pesaut","acrob", "altro91", "al92", #d33
         
-        "usedtime", 
+        "usedtime", #d35
         
-        "agevo",
+        "agevo", #d36
         
-        "qualprod", "welfare","ecoaz", "altro98", "al99", 
+        "qualprod", "welfare","ecoaz", "altro98", "al99", #d37
         
-        "easyuse",
+        "easyuse", #d39
         
-        "lesioni", "rotsens", "lostdata", "internet", "asstecn", "riftecn", "tempogdati", "altro108", "al109",
+        "lesioni", "rotsens", "lostdata", "internet", "asstecn", "riftecn", "tempogdati", "altro108", "al109", #d40
         
-        "invest", 
+        "invest", #d42
         
-        "likert", 
+        "likert", #d43
         
-        "invest2", 
-        
-        "innov" )
+        "innov" ) #d44
 
 names(dati)<-nomi
     
-
-
 
 
 

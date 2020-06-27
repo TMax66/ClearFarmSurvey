@@ -9,13 +9,14 @@ ui <- dashboardPage(
       menuItem("Introduzione", tabName = "intro", icon = icon("th")),
       hr(),
       p("Visualizza i risultati"),
-      menuItem("sezione1", tabName = "risp1", icon = icon("dashboard")),
-      menuItem("sezione2", tabName = "risp2", icon = icon("dashboard")),
-      menuItem("sezione3", tabName = "risp3", icon = icon("dashboard"))
+      menuItem("Quadro generale", tabName = "risp1", icon = icon("dashboard")),
+      menuItem("Sensori amb o anim", tabName = "risp2", icon = icon("dashboard")),
+      menuItem("Sensori amb e anim", tabName = "risp3", icon = icon("dashboard"))
     )
   ),
   dashboardBody(
     tabItems(
+      ####INTRODUZIONE####
       tabItem(
         tabName="intro", 
         fluidRow(
@@ -25,6 +26,7 @@ ui <- dashboardPage(
         )
       ),
       tabItem(
+        ####SEZIONE 1####
         tabName = "risp1",
         fluidRow(
             fluidRow(
@@ -73,65 +75,131 @@ ui <- dashboardPage(
                 )
           ), 
       tabItem(
+        ####SEZIONE 2####
         tabName = "risp2",
-         fluidRow(
-           column(6,
-           plotOutput("psamb")),
-           column(6,
-           plotOutput("psanim"))), 
-      
-        hr(),
-        fluidRow(
-          
-          column(6, 
-                 valueBoxOutput("robott", width = NULL),
-                 plotOutput("pinforobo")),
-                 
-          column(6, 
-                 valueBoxOutput("norobot", width = NULL),
-                 plotOutput("pnorob"))
-        ),
-        hr(),
-        fluidRow(
-          
-          column(6, 
-                 plotOutput("panpar")),
-          column(6, 
-                 plotOutput("pamb")
-        )), 
-        hr(),
-        fluidRow(
-          
-          column(6, 
-                 plotOutput("pambpr"))
-              )
-              ), 
-      tabItem(tabName = "risp3",
-              
+        fluidPage(  
+           tabBox(title="",width = 12, 
+                  ######sensori ambientali#####
+              tabPanel( "Utilizzo esclusivo di sensori ambientali" , 
+                        fluidPage( 
+                 fluidRow(
+                  box( width = 6, 
+                   plotOutput("psamb")),
+                  box(width = 6, 
+                   plotOutput("psamb2"))), 
+                fluidRow(
+                  box(
+                   plotOutput("psamb3")))
+                        )), 
+                   #####sensori animali####
+              tabPanel(" Utilizzo esclusivo di sensori su animali",
+                       fluidRow(
+                         box(width=6, 
+                          plotOutput("psanim")),
+                         box(width = 6, 
+                          plotOutput("psanim2"))),
+                       fluidRow(
+                         box(
+                           plotOutput("psanim3")
+                         )
+                       )
+                       ) 
+
+              ))), 
+      tabItem(
+        tabName = "risp3", 
+           fluidPage(
+             tabBox(title="",width = 12, 
+                    ####sensori ambientali####
+            tabPanel("sensori ambientali",
               fluidRow(
-                column(6, 
-                       plotOutput("ptuso")),
-                column(6, 
-                       plotOutput("likert")) 
-              ), 
-              br(), 
-              hr(), 
-              
+                box(
+                  plotOutput("pBsamb")), 
+                box(
+                  plotOutput("pBsamb2"))
+                ),
               fluidRow(
-                column(6, 
-                valueBoxOutput("easy", width = NULL),      
-                plotOutput("pmiglior")), 
-                column(6, 
-                       plotOutput("pinnov"))    
-              )
-            
-              
-              
-              
-              )
-        )
-      )
+                box(
+                  plotOutput("pBsamb3")
                 )
+              )
+                  
+                )
+              )
+            ), 
+                 ####sensori animali###
+            tabPanel("sensori animali", 
+                fluidRow(
+                  box(
+                    plotOutput("pBsanim")
+                  )
+                  
+                )
+            )
+               
+             )
+           )
+      )
+      
+      
+      
+      
+      
+      
+      
+      
+      )
+                
+                 #valueBoxOutput("robott", width = NULL),
+                  
+                 
+          # column(6, 
+          #       # valueBoxOutput("norobot", width = NULL),
+          #        plotOutput("pnorob"))
+    
+        # hr(),
+        # fluidRow(
+        #   
+        #   column(6, 
+        #          plotOutput("panpar")),
+        #   column(6, 
+        #          plotOutput("pamb")
+    
+       
+      #  ), 
+      #   hr(),
+      #   fluidRow(
+      #     
+      #     column(6, 
+      #            plotOutput("pambpr"))
+      #         )
+      #         ), 
+      # tabItem(tabName = "risp3",
+      #         
+      #         fluidRow(
+      #           column(6, 
+      #                  plotOutput("ptuso")),
+      #           column(6, 
+      #                  plotOutput("likert")) 
+      #         ), 
+      #         br(), 
+      #         hr(), 
+      #         
+      #         fluidRow(
+      #           column(6, 
+      #           valueBoxOutput("easy", width = NULL),      
+      #           plotOutput("pmiglior")), 
+      #           column(6, 
+      #                  plotOutput("pinnov"))    
+      #         )
+      #       
+      #         
+      #         
+      #         
+      #         )
+      #   )
+      # )
+                  
 
       
       
