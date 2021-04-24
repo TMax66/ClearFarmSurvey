@@ -14,12 +14,14 @@
   library(ggthemes)
   library(googledrive)
   library(patchwork)
+
+
   options(
     gargle_oauth_cache = ".secrets",
     gargle_oauth_email = TRUE
   )
   drive_auth()
-  sheets_auth(token = drive_token())
+  gs4_auth(token = drive_token())
     mydrive<-drive_find(type = "spreadsheet") 
   id<-mydrive[1,2]
   dati<-read_sheet(id$id)
